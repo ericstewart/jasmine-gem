@@ -12,36 +12,6 @@
   <script src="<%= jasmine_file %>" type="text/javascript"></script>
   <% end %>
 
-  <script type="text/javascript">
-    var jsApiReporter;
-    (function() {
-      var jasmineEnv = jasmine.getEnv();
-
-      jsApiReporter = new jasmine.JsApiReporter();
-      var trivialReporter = new jasmine.TrivialReporter();
-
-      jasmineEnv.addReporter(jsApiReporter);
-      jasmineEnv.addReporter(trivialReporter);
-
-      jasmineEnv.specFilter = function(spec) {
-        return trivialReporter.specFilter(spec);
-      };
-
-      var currentWindowOnload = window.onload;
-
-      window.onload = function() {
-        if (currentWindowOnload) {
-          currentWindowOnload();
-        }
-        execJasmine();
-      };
-
-      function execJasmine() {
-        jasmineEnv.execute();
-      }
-
-    })();
-  </script>
 
   <% js_files.each do |js_file| %>
   <script src="<%= js_file %>" type="text/javascript"></script>
@@ -50,5 +20,27 @@
 </head>
 <body>
 <div id="jasmine_content"></div>
+
+  <script type="text/javascript">
+    var jsApiReporter, jasmineEnv, trivialReporter;
+    Ext.onReady(function() {
+        jasmineEnv = jasmine.getEnv();
+
+        jsApiReporter = new jasmine.JsApiReporter();
+        trivialReporter = new jasmine.TrivialReporter();
+
+        jasmineEnv.addReporter(jsApiReporter);
+        jasmineEnv.addReporter(trivialReporter);
+
+        jasmineEnv.specFilter = function(spec) {
+        return trivialReporter.specFilter(spec);
+        };
+
+        window.onload = function() {
+        jasmineEnv.execute();
+        };
+        });
+
+  </script>
 </body>
 </html>
